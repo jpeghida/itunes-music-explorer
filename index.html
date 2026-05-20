@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hida's Garage — iTunes Music Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* Menggunakan Palet Warna Hida's Garage secara Presisi */
+        body {
+            background-color: #0b0f19; /* Latar belakang pekat */
+            color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Container header atas */
+        .app-header {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .app-subtitle {
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        /* Container Konten Utama */
+        .content-card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        /* Filter & Form Input */
+        .form-control-custom {
+            background-color: #0b0f19;
+            border: 1px solid #1f2937;
+            color: #f8fafc;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 0.875rem;
+        }
+
+        .form-control-custom:focus {
+            background-color: #0b0f19;
+            border-color: #3b82f6;
+            color: #f8fafc;
+            box-shadow: none;
+        }
+
+        /* Tombol ala Hida's Garage */
+        .btn-custom-outline {
+            background-color: transparent;
+            border: 1px solid #374151;
+            color: #f8fafc;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            padding: 8px 16px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-custom-outline:hover {
+            background-color: #1f2937;
+            border-color: #4b5563;
+            color: #f8fafc;
+        }
+
+        /* Desain Kartu Produk/Koleksi Musik */
+        .music-card {
+            background-color: transparent;
+            border: none;
+            height: 100%;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-radius: 12px;
+            background-color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .music-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .music-card:hover img {
+            transform: scale(1.03); /* Mikro-interaksi saat di-hover */
+        }
+
+        .music-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            color: #f8fafc;
+            text-decoration: none;
+        }
+
+        .music-meta {
+            font-size: 0.875rem;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+
+        /* Badge Genre */
+        .badge-genre {
+            background-color: #1e1b4b;
+            color: #c7d2fe;
+            border: 1px solid #312e81;
+            font-weight: 500;
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* KODE BARU CSS: Menyesuaikan pemutar audio dengan tema gelap Hida's Garage */
+        .custom-audio-player {
+            filter: invert(90%) hue-rotate(180deg);
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+        
+        .custom-audio-player:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container my-4" style="max-width: 1200px;">
+        
+        <header class="app-header mb-4">
+            <div>
+                <div class="app-title">Hida's Garage — iTunes Search</div>
+                <div class="app-subtitle">Eksplorasi data rilisan musik global secara real-time</div>
+            </div>
+        </header>
+
+        <main class="content-card">
+            <div class="mb-4">
+                <h2 class="section-title mb-1">Explore Music</h2>
+                <p class="app-subtitle">Cari musisi favoritmu dan dengarkan preview audio langsung dari database iTunes.</p>
+            </div>
+
+            <div class="mb-4">
+                <form id="searchForm" class="row g-2 align-items-center">
+                    <div class="col-sm-6 col-md-4">
+                        <input type="text" id="searchInput" class="form-control form-control-custom w-100" placeholder="Search album / artist..." required>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-custom-outline">Apply</button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" id="resetBtn" class="btn btn-custom-outline">Reset</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="messageContainer" class="my-4"></div>
+
+            <div class="row row-cols-2 row-cols-md-4 g-4" id="musicContainer">
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
