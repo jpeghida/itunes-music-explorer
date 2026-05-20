@@ -9,5 +9,6 @@ Platform kurasi dan eksplorasi data rilisan musik global secara real-time yang m
 - **Robust Error Handling:** Menggunakan arsitektur penanganan kesalahan (*try-catch*) untuk memastikan aplikasi tetap stabil dan menampilkan pesan informatif jika koneksi internet terputus atau server API down.
 - **Premium Dark Interface:** Desain antarmuka adaptif yang minimalis, konsisten, dan elegan dengan kenyamanan mode gelap (*dark mode*).
 
-## Link Video Youtube
-(MASUKKAN_LINK_YOUTUBE_ATAU_GOOGLE_DRIVE_KAMU)
+## Dokumentasi dan Preview Web
+link web       : https://jpeghida.github.io/itunes-music-explorer
+link youtube   : 
