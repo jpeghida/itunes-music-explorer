@@ -11,4 +11,4 @@ Platform kurasi dan eksplorasi data rilisan musik global secara real-time yang m
 
 ## Dokumentasi dan Preview Web
 link web       : https://jpeghida.github.io/itunes-music-explorer
-link youtube   : 
+link youtube   : https://youtube.com/watch?v=KTSmMdCyvOs&si=Fc6QKSlTLthdsEhk
