@@ -5,46 +5,51 @@ const musicContainer = document.getElementById('musicContainer');
 const messageContainer = document.getElementById('messageContainer');
 const resetBtn = document.getElementById('resetBtn');
 
-// 1. Logika Pengambilan Data API (Data Fetching dengan Penanganan Error)
-async function fetchMusicData(keyword) {
-    // Tampilkan elemen loading transisi yang bersih
+// 1. Logika Request Menggunakan JSONP (Solusi Ampuh Bypass CORS GitHub Pages)
+function fetchMusicData(keyword) {
     messageContainer.innerHTML = `<div class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-secondary me-2" role="status"></div>Loading data dari iTunes...</div>`;
     musicContainer.innerHTML = ''; 
 
-    try {
-        // Melakukan request HTTP GET secara asinkronus ke server iTunes
-        const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(keyword)}&limit=12&entity=song`);
-        
-        if (!response.ok) {
-            throw new Error('Gagal mendapatkan respons valid dari server API.');
-        }
+    // Hapus script lama jika ada biar gak numpuk di memori
+    const oldScript = document.getElementById('itunes-jsonp');
+    if (oldScript) {
+        oldScript.remove();
+    }
 
-        const data = await response.json();
-
-        // Pemeriksaan ketersediaan data (Empty State handling)
-        if (data.results.length === 0) {
-            messageContainer.innerHTML = `<div class="alert alert-dark border-secondary text-muted text-center" style="background-color: #111827;">Koleksi tidak ditemukan. Coba kata kunci alternatif.</div>`;
-            return;
-        }
-
-        // Hilangkan pesan loading jika data siap diproses
-        messageContainer.innerHTML = '';
-        renderMusicGallery(data.results);
-
-    } catch (error) {
-        // Penanganan error jika jaringan offline atau API bermasalah
-        console.error(error);
+    // Membuat elemen script baru untuk memanggil API iTunes via JSONP
+    const script = document.createElement('script');
+    script.id = 'itunes-jsonp';
+    
+    // Menambahkan parameter &callback=handleiTunesResponse agar membypass CORS
+    script.src = `https://itunes.apple.com/search?term=${encodeURIComponent(keyword)}&limit=12&entity=song&callback=handleiTunesResponse`;
+    
+    // Penanganan error jika script gagal dimuat (misal: kuota habis/rto)
+    script.onerror = function() {
         messageContainer.innerHTML = `
             <div class="alert alert-danger border-danger text-center" style="background-color: #1c1012; color: #fca5a5;">
-                <strong>Gagal Memuat Konten:</strong> ${error.message || 'Koneksi internet terputus.'}
+                <strong>Gagal Memuat Konten:</strong> Koneksi ke API iTunes terputus.
             </div>`;
-    }
+    };
+
+    // Menyuntikkan script ke dokumen untuk mengeksekusi request
+    document.body.appendChild(script);
 }
 
-// 2. Logika Presentasi Data Antarmuka (Render Loop UI + Audio Player Terintegrasi)
+// 2. Fungsi Callback Global (Wajib ada untuk menerima data JSONP)
+window.handleiTunesResponse = function(data) {
+    // Jalankan pengecekan jika data kosong
+    if (!data || !data.results || data.results.length === 0) {
+        messageContainer.innerHTML = `<div class="alert alert-dark border-secondary text-muted text-center" style="background-color: #111827;">Koleksi tidak ditemukan. Coba kata kunci alternatif.</div>`;
+        return;
+    }
+
+    messageContainer.innerHTML = '';
+    renderMusicGallery(data.results);
+};
+
+// 3. Logika Presentasi Data Antarmuka (Render Loop UI)
 function renderMusicGallery(songs) {
     songs.forEach(song => {
-        // Mengubah resolusi gambar bawaan iTunes agar tajam (400x400)
         const highResCover = song.artworkUrl100.replace('100x100bb.jpg', '400x400bb.jpg');
 
         const itemHtml = `
@@ -61,7 +66,6 @@ function renderMusicGallery(songs) {
                             </div>
                         </div>
                     </div>
-                    
                     <div class="mt-3">
                         <audio controls class="w-100 custom-audio-player" style="height: 30px;">
                             <source src="${song.previewUrl}" type="audio/x-m4a">
@@ -75,7 +79,7 @@ function renderMusicGallery(songs) {
     });
 }
 
-// 3. Event Handling (Kontrol Aksi Form & Tombol)
+// 4. Event Handling (Kontrol Aksi Form & Tombol)
 searchForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const keyword = searchInput.value.trim();
@@ -86,7 +90,7 @@ searchForm.addEventListener('submit', (e) => {
 
 resetBtn.addEventListener('click', () => {
     searchInput.value = '';
-    fetchMusicData('Frank Ocean'); // Mengembangkan state awal ke musisi default pilihan Hida's Garage
+    fetchMusicData('Frank Ocean');
 });
 
 // Panggilan Inisialisasi Awal saat Aplikasi Dimuat Pertama Kali
